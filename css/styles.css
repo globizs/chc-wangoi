@@ -1,0 +1,118 @@
+body {
+  color: #212529 !important;
+}
+#page-title {
+  color: #212529;
+}
+.brand-logo {
+  max-height: 2rem;
+}
+#accordionSidebar {
+  background-color: #002233e0;
+}
+@media(min-width:767px) {
+  .dropdown-menu.dropdown-menu-right.shadow.animated--grow-in.show {
+    transform: translateX(-6rem);
+  }
+}
+@media(max-width:767px) {
+  .dropdown-menu[data-bs-popper] {
+    left: unset;
+    right: 0 !important;
+  }
+}
+
+.sidebar .nav-item .nav-link {
+  padding-top: 0.5rem !important; /* Override padding to 0 rem */
+  padding-bottom: 0.5rem !important; /* Override padding to 0 rem */
+}
+
+.background-light{
+  background-color: #3233320a;
+}
+
+.header-text{
+  font-weight: bold;
+}
+
+.help-block{
+  color: #E72929;
+  font-size: 0.8rem;
+}
+
+.hover-img:hover {
+  transform: scale(3); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.select2-selection__clear{
+  padding-right: 15px;
+}
+.employee-form.form-control.krajee-datepicker {
+  height: 3.6rem;
+}
+.dropdown-menu .day, .dropdown-menu .datepicker-switch {
+  color: #191a28;
+}
+.has-success .form-control, .has-success .form-select, .has-success .select2-selection, .has-success .input-group-text {
+  border-color: #1cc88a !important;
+}
+.table, .form-control, .grid-view td a.block {
+  color: #212529 !important;
+}
+.grid-view td {
+  vertical-align: middle !important;
+}
+.go-back {
+  cursor: pointer;
+}
+.block, a.block:hover {
+  display: block;
+  text-decoration: none;
+}
+.breadcrumb {
+  padding: 0.5rem 1rem !important;
+}
+.toast {
+  position: fixed;
+  right: 1%;
+  bottom: 1%;
+  opacity: 1 !important;
+}
+.table-hover tbody tr:hover {
+  background-color: #f2f2f2 !important;
+}
+.sidebar .sidebar-brand {
+  height: 6rem !important;
+}
+.topbar {
+  height: 3.75rem !important;
+}
+.topbar .dropdown .dropdown-menu {
+  width: 11rem !important;
+}
+.sidebar .nav-item .nav-link::after {
+  font-family: 'Font Awesome 5 Free';
+  float: right;
+  font-weight: 900;
+}
+.sidebar .nav-item .nav-link[data-bs-toggle="collapse"].collapsed::after {
+  content: '\f105';
+}
+.sidebar .nav-item .nav-link[data-bs-toggle="collapse"]::after {
+  content: '\f107';
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.required label:after {
+  content: '*';
+  color: #C80036;
+}
+.input-group.date span.input-group-text.kv-date-picker {
+  padding: 1.2rem .75rem;
+}
+.input-group.date input.form-control.krajee-datepicker {
+  height: 3.5rem;
+}
