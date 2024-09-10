@@ -1,52 +1,83 @@
 <?php
 
-use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/** @var yii\web\View $this */
-/** @var frontend\models\Opd $model */
-
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Opds', 'url' => ['index']];
+$this->title = 'OPD Registration no. ' . $model->opd_registration_no;
+$this->params['breadcrumbs'][] = ['label' => 'OPD Registration', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 ?>
 <div class="opd-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'receipt_no',
             'abha_id',
             'patient_name',
             'care_taker_name',
             'age',
             'gender',
-            'religion_id',
+            [
+                'attribute' => 'religion_id',
+                'value' => function($model) {
+                    $religion = $model->religion;
+                    return $religion ? $religion->name : null;
+                },
+            ],
             'address:ntext',
             'diagnosis:ntext',
-            'fee_amount',
-            'opd_date',
-            'opd_session_id',
-            'department_id',
-            'created_by_user_id',
-            'created_at',
-            'updated_at',
-            'is_active',
+            [
+                'attribute' => 'fee_amount',
+                'value' => function($model) {
+                    return '&#8377;' . $model->fee_amount;
+                },
+                'format' => 'raw'
+            ],
+            [
+                'attribute' => 'opd_date',
+                'value' => function($model) {
+                    return date('d/m/Y', strtotime($model->opd_date));
+                }
+            ],
+            [
+                'attribute' => 'opd_session_id',
+                'value' => function($model) {
+                    $opdSession = $model->opdSession;
+                    return $opdSession ? $opdSession->name : null;
+                },
+            ],
+            [
+                'attribute' => 'department_id',
+                'value' => function($model) {
+                    $department = $model->department;
+                    return $department ? $department->name : null;
+                },
+            ],
+            [
+                'attribute' => 'created_by_user_id',
+                'value' => function($model) {
+                    $user = $model->createByUserId;
+                    return $user ? $user->username : null;
+                },
+            ],
+            [
+                'attribute' => 'created_at',
+                'value' => function($model) {
+                    return date('d/m/Y h:i a', strtotime($model->created_at));
+                }
+            ],
+            [
+                'attribute' => 'updated_at',
+                'value' => function($model) {
+                    return $model->updated_at ? date('d/m/Y h:i a', strtotime($model->updated_at)) : null;
+                }
+            ],
+            [
+                'attribute' => 'is_active',
+                'value' => function($model) {
+                    return $model->is_active == '1' ? 'Active' : '<b class="text-danger">Deleted</b>';
+                },
+                'format' => 'raw'
+            ],
         ],
     ]) ?>
 

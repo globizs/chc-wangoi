@@ -10,7 +10,7 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
 
 ?>
 
-<div class="department-form">
+<div class="religion-form">
 
     <?php $form = ActiveForm::begin(['id' => 'app-form']); ?>
 

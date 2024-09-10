@@ -1,6 +1,6 @@
 <?php
 
-$this->title = 'ID Card';
+$this->title = 'Dashboard';
 ?>
 <div class="site-index">
 </div>

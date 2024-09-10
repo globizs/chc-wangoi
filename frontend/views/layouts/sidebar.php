@@ -37,5 +37,6 @@ echo Menu::widget([
         [ 'label' => 'Religions', 'url' => ['/religion']],
       ],
     ],
+    ['label' => 'Users', 'url' => ['/user/index'], 'icon' => 'fas fa-users'],
   ],
 ]);

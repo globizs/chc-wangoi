@@ -19,9 +19,9 @@ $template = Yii::$app->params['bs5_floating_label_template'];
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'app-form']); ?>
 
-                <?= $form->field($model, 'username', ['options' => $options, 'template' => $template])->textInput(['autofocus' => true]) ?>
+                <?= $form->field($model, 'username', ['options' => $options, 'template' => $template])->textInput(['autofocus' => true, 'placeholder' => '']) ?>
 
-                <?= $form->field($model, 'password', ['options' => $options, 'template' => $template])->passwordInput() ?>
+                <?= $form->field($model, 'password', ['options' => $options, 'template' => $template])->passwordInput(['placeholder' => '']) ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'id' => 'submit-btn']) ?>

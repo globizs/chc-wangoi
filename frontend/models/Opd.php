@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\User;
 use Yii;
 
 /**
@@ -67,10 +68,10 @@ class Opd extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'opd_registration_no' => 'OPD reg. no.',
+            'opd_registration_no' => 'O.P.D. Regn. No.',
             'abha_id' => 'ABHA ID',
-            'patient_name' => 'Patient name',
-            'care_taker_name' => 'Caretaker name',
+            'patient_name' => 'Name of Patient',
+            'care_taker_name' => 'Name of Husband/Guardian',
             'age' => 'Age',
             'gender' => 'Gender',
             'religion_id' => 'Religion',
@@ -112,5 +113,10 @@ class Opd extends \yii\db\ActiveRecord
     public function getReligion()
     {
         return $this->hasOne(Religion::class, ['id' => 'religion_id']);
+    }
+
+    public function getCreateByUserId()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by_user_id']);
     }
 }

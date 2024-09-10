@@ -4,14 +4,16 @@ use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
-$this->title = 'Departments';
+$this->title = 'Religions';
 $this->params['breadcrumbs'][] = $this->title;
 
 $statuses = ['1' => 'Active', '0' => 'Deleted'];
-?>
-<div class="department-index">
 
-        <?= Html::a('Create Department', ['create'], ['class' => 'btn btn-success openModal', 'size' => 'sm', 'header' => 'Create Department']) ?>
+?>
+<div class="religion-index">
+
+    <p>
+        <?= Html::a('Create Religion', ['create'], ['class' => 'btn btn-success openModal', 'size' => 'sm', 'header' => 'Create Religion']) ?>
     </p>
 
     <div class="card">
@@ -19,9 +21,9 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
             <div class="table-responsive">
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-sm table-striped'],
                     'pager' => ['linkOptions' => ['class' => 'page-link'], 'disabledPageCssClass' => 'page-item', 'pageCssClass' => 'page-item', 'prevPageCssClass' => 'page-item prev', 'nextPageCssClass' => 'page-item next', 'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link disabled']],
-                    'filterModel' => $searchModel,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
 
@@ -39,7 +41,7 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                             'template' => '{update}',
                             'buttons' => [
                                 'update' => function($url, $model) {
-                                    return Html::a('<i class="fas fa-edit"></i>', $url, ['class' => 'openModal', 'size' => 'sm', 'header' => 'Update Department']);
+                                    return Html::a('<i class="fas fa-edit"></i>', $url, ['class' => 'openModal', 'size' => 'sm', 'header' => 'Update Religion']);
                                 }
                             ]
                         ],
@@ -48,5 +50,6 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
             </div>
         </div>
     </div>
+
 
 </div>

@@ -6,8 +6,11 @@ use Yii;
 use frontend\models\Opd;
 use frontend\models\OpdSearch;
 use frontend\models\OpdSession;
+use frontend\models\Setting;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+
+date_default_timezone_set('Asia/Kolkata');
 
 /**
  * OpdController implements the CRUD actions for Opd model.
@@ -24,9 +27,18 @@ class OpdController extends Controller
         $searchModel = new OpdSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $closestSession = OpdSession::find()->asArray()->select('id, name, start_time, current_session')->where(['<', 'start_time', date('H:i:s')])->andWhere(['is_active' => '1'])->orderBy('start_time DESC')->one();
+
+        $opdSessionPrompt = $closestSession && $closestSession['current_session'] != '1';
+
+        $activeOpdSession = OpdSession::find()->asArray()->select('name')->where(['current_session' => '1', 'is_active' => '1'])->one();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'opdSessionPrompt' => $opdSessionPrompt,
+            'closestSession' => $closestSession,
+            'activeOpdSession' => $activeOpdSession,
         ]);
     }
 
@@ -69,7 +81,7 @@ class OpdController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        $activeOpdSession = OpdSession::find()->asArray()->select('id, fee')->where(['current_session' => '1'])->one();
+        $activeOpdSession = OpdSession::find()->asArray()->select('id, fee')->where(['current_session' => '1', 'is_active' => '1'])->one();
         if ($activeOpdSession) {
             $model->opd_session_id = $activeOpdSession['id'];
             $model->fee_amount = $activeOpdSession['fee'];
@@ -109,6 +121,16 @@ class OpdController extends Controller
 
         return $this->renderAjax('_form', [
             'model' => $model,
+        ]);
+    }
+
+    // print opd ticket
+    public function actionPrint($id) {
+        $receiptHeading = Setting::find()->asArray()->select('value')->where(['name' => 'receipt_heading'])->one();
+
+        return $this->renderAjax('_ticket', [
+            'model' => $this->findModel($id),
+            'receiptHeading' => $receiptHeading['value'],
         ]);
     }
 

@@ -3,35 +3,24 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\OpdSession;
-use frontend\models\OpdSessionSearch;
+use frontend\models\Religion;
+use frontend\models\ReligionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * OpdSessionController implements the CRUD actions for OpdSession model.
+ * ReligionController implements the CRUD actions for Religion model.
  */
-class OpdSessionController extends Controller {
-
-    public function behaviors() {
-        return [
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::class,
-                'actions' => [
-                    'set-current' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
+class ReligionController extends Controller
+{
     /**
-     * Lists all OpdSession models.
+     * Lists all Religion models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new OpdSessionSearch();
+        $searchModel = new ReligionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -41,19 +30,15 @@ class OpdSessionController extends Controller {
     }
 
     /**
-     * Creates a new OpdSession model.
+     * Creates a new Religion model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new OpdSession();
+        $model = new Religion();
 
         if ($model->load($this->request->post())) {
-            if ($model->current_session == '1') {
-                // set all to '0'
-                OpdSession::updateAll(['current_session' => '0']);
-            }
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Successfully saved!');
             } else {
@@ -69,7 +54,7 @@ class OpdSessionController extends Controller {
     }
 
     /**
-     * Updates an existing OpdSession model.
+     * Updates an existing Religion model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -80,10 +65,6 @@ class OpdSessionController extends Controller {
         $model = $this->findModel($id);
 
         if ($model->load($this->request->post())) {
-            if ($model->current_session == '1') {
-                // set all to '0'
-                OpdSession::updateAll(['current_session' => '0']);
-            }
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Successfully saved!');
             } else {
@@ -98,27 +79,16 @@ class OpdSessionController extends Controller {
         ]);
     }
 
-    // set current_session
-    public function actionSetCurrent($id) {
-        $model = $this->findModel($id);
-        $model->current_session = '1';
-        $model->save(false);
-
-        Yii::$app->session->setflash('success', 'Current OPD session successfully set to: <b>' . $model->name . '</b>');
-
-        return $this->redirect(Yii::$app->request->referrer);
-    }
-
     /**
-     * Finds the OpdSession model based on its primary key value.
+     * Finds the Religion model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return OpdSession the loaded model
+     * @return Religion the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OpdSession::findOne(['id' => $id])) !== null) {
+        if (($model = Religion::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

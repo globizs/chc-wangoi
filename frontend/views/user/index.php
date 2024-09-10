@@ -6,7 +6,7 @@ $this->title = 'User Management';
 ?>
 
 <p>
-	<?= Html::a('Add User', ['create'], ['class' => 'btn btn-primary openModal', 'size' => 'lg', 'header' => 'Add User']) ?>
+	<?= Html::a('Add User', ['create'], ['class' => 'btn btn-success openModal', 'size' => 'lg', 'header' => 'Add User']) ?>
 </p>
 
 <div class="card">

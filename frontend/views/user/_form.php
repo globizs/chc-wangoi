@@ -16,10 +16,10 @@ use yii\bootstrap5\ActiveForm;
 	</div>
 </div>
 
-<?= $form->field($model, 'permissions')->checkBoxList($permissions) ?>
+<?= $form->field($model, 'permissions')->checkBoxList($permissions)->label(false) ?>
 
 <div class="form-group">
-    <?= Html::submitButton('Add User', ['class' => 'btn btn-primary', 'id' => 'submit-btn']) ?>
+    <?= Html::submitButton('Add User', ['class' => 'btn btn-success', 'id' => 'submit-btn']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
