@@ -126,11 +126,43 @@ class OpdController extends Controller
 
     // print opd ticket
     public function actionPrint($id) {
-        $receiptHeading = Setting::find()->asArray()->select('value')->where(['name' => 'receipt_heading'])->one();
+        $settings = Setting::find()->asArray()->select('name, value')->where(['name' => ['receipt_heading', 'vital_signs', 'physical_examination', 'systemic_examination', 'chief_complaints', 'comorbidities', 'receipt_footer']])->all();
+
+        foreach ($settings as $setting) {
+            switch ($setting['name']) {
+                case 'receipt_heading':
+                    $receiptHeading = $setting['value'];
+                    break;
+                case 'vital_signs':
+                    $vitalSigns = $setting['value'];
+                    break;
+                case 'physical_examination':
+                    $physicalExamination = $setting['value'];
+                    break;
+                case 'systemic_examination':
+                    $systemicExamination = $setting['value'];
+                    break;
+                case 'chief_complaints':
+                    $chiefComplaints = $setting['value'];
+                    break;
+                case 'comorbidities':
+                    $comorbidities = $setting['value'];
+                    break;
+                case 'receipt_footer':
+                    $receiptFooter = $setting['value'];
+                    break;
+            }
+        }
 
         return $this->renderAjax('_ticket', [
             'model' => $this->findModel($id),
-            'receiptHeading' => $receiptHeading['value'],
+            'receiptHeading' => $receiptHeading,
+            'vitalSigns' => $vitalSigns,
+            'physicalExamination' => $physicalExamination,
+            'systemicExamination' => $systemicExamination,
+            'chiefComplaints' => $chiefComplaints,
+            'comorbidities' => $comorbidities,
+            'receiptFooter' => $receiptFooter,
         ]);
     }
 
