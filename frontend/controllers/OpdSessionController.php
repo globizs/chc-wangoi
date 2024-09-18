@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\OpdSession;
 use frontend\models\OpdSessionSearch;
+use frontend\models\Setting;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -19,6 +20,7 @@ class OpdSessionController extends Controller {
                 'class' => \yii\filters\VerbFilter::class,
                 'actions' => [
                     'set-current' => ['POST'],
+                    'session-auto' => ['POST'],
                 ],
             ],
         ];
@@ -98,8 +100,8 @@ class OpdSessionController extends Controller {
         ]);
     }
 
-    // set current_session
-    public function actionSetCurrent($id) {
+    // set current_session (No longer used)
+    /* public function actionSetCurrent($id) {
         $model = $this->findModel($id);
         $model->current_session = '1';
         $model->save(false);
@@ -107,6 +109,20 @@ class OpdSessionController extends Controller {
         Yii::$app->session->setflash('success', 'Current OPD session successfully set to: <b>' . $model->name . '</b>');
 
         return $this->redirect(Yii::$app->request->referrer);
+    } */
+
+    // to flip opd session auto change yes/no
+    public function actionSessionAuto($mode) {
+        if (!in_array($mode, ['Yes', 'No'])) {
+            Yii::$app->session->setFlash('danger', 'Invalid mode sent!');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        $setting = Setting::findOne(['name' => 'opd_session_auto_set']);
+        $setting->value = $mode;
+        $setting->save(false);
+
+        return 1;
     }
 
     /**

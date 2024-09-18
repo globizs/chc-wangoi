@@ -14,7 +14,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php $this->registerCsrfMetaTags() ?>
-    <title>CHC Wangoi - <?= Html::encode($this->title) ?></title>
+    <title>R.K.S. CHC Wangoi - <?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
@@ -23,10 +23,10 @@ AppAsset::register($this);
 <header>
     <?php
     NavBar::begin([
-        'brandLabel' => 'CHC Wangoi',
+        'brandLabel' => '<img src="/images/nhm-logo.png" style="height: 2rem; margin-right: 1rem;">R.K.S. CHC Wangoi',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+            'class' => 'navbar navbar-expand-md navbar-light bg-light fixed-top',
         ],
     ]);
 
@@ -42,8 +42,10 @@ AppAsset::register($this);
 </main>
 
 <footer class="footer bg-dark mt-auto py-3 text-muted">
-    <div class="container">
-        <p class="float-start">&copy;CHC Wangoi 2024</p>
+    <div class="container my-auto d-flex justify-content-between align-items-center" style="font-size: 12px;">
+        <div>&copy; R.K.S. CHC Wangoi 2024</div>
+        <div title="Technical support number">Tech. support: 844 844 7720</div>
+        <div class="d-flex align-items-center">Powered by <a class="d-flex align-items-center" href="https://globizs.com" target="_blank"><img src="/images/globizs.png" style="height: 1rem;"></a></div>
     </div>
 </footer>
 

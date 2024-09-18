@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb96e0e9abc0c62fc760c353ec93ff00",
+    "content-hash": "f90e9cb78ff0b0a077034ca64f57a44b",
     "packages": [
         {
             "name": "2amigos/qrcode-library",
@@ -581,6 +581,69 @@
             "time": "2023-07-25T08:41:55+00:00"
         },
         {
+            "name": "kartik-v/yii2-editors",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-editors.git",
+                "reference": "529cff31afda936ac5c98d7f9c53bb01c4452419"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-editors/zipball/529cff31afda936ac5c98d7f9c53bb01c4452419",
+                "reference": "529cff31afda936ac5c98d7f9c53bb01c4452419",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": ">=3.0.0"
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\editors\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Editor widgets Yii2 framework. Summernote WYSIWYG editor, Codemirror code editor and PlainText editor for Bootstrap 3.x, 4.x and 5.x.",
+            "homepage": "https://github.com/kartik-v/yii2-editors",
+            "keywords": [
+                "bootstrap",
+                "code",
+                "codemirror",
+                "editor",
+                "extension",
+                "file",
+                "html",
+                "input",
+                "rich",
+                "summernote",
+                "widget",
+                "wysiwyg",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/kartik-v/yii2-editors/issues",
+                "source": "https://github.com/kartik-v/yii2-editors/tree/v1.0.1"
+            },
+            "time": "2021-09-03T07:40:00+00:00"
+        },
+        {
             "name": "kartik-v/yii2-export",
             "version": "dev-master",
             "source": {
@@ -952,6 +1015,65 @@
                 }
             ],
             "time": "2023-07-31T11:33:59+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-widget-datetimepicker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
+                "reference": "85b22d38553ca207f86be198f37e6531347e9a23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/85b22d38553ca207f86be198f37e6531347e9a23",
+                "reference": "85b22d38553ca207f86be198f37e6531347e9a23",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": ">=3.0.4"
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\datetime\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Enhanced Yii2 wrapper for the bootstrap datetimepicker plugin (sub repo split from yii2-widgets)",
+            "homepage": "https://github.com/kartik-v/yii2-widget-datetimepicker",
+            "keywords": [
+                "datetime",
+                "extension",
+                "form",
+                "jquery",
+                "picker",
+                "plugin",
+                "select2",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/kartik-v/yii2-widget-datetimepicker/issues",
+                "source": "https://github.com/kartik-v/yii2-widget-datetimepicker/tree/v1.5.1"
+            },
+            "time": "2022-03-18T17:42:22+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-select2",
@@ -6707,6 +6829,8 @@
         "kartik-v/yii2-export": 20,
         "kartik-v/yii2-date-range": 20,
         "kartik-v/yii2-bootstrap5-dropdown": 20,
+        "kartik-v/yii2-editors": 20,
+        "kartik-v/yii2-widget-datetimepicker": 20,
         "kartik-v/yii2-widget-datepicker": 20
     },
     "prefer-stable": false,

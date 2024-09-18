@@ -36,10 +36,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $user = User::findOne(1);
-        Yii::$app->user->login($user);
-
-        return $this->render('index');
+        return $this->redirect(['/opd/index']);
     }
 
     public function actionLogin()

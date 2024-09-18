@@ -27,17 +27,44 @@ class OpdController extends Controller
         $searchModel = new OpdSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        $closestSession = OpdSession::find()->asArray()->select('id, name, start_time, current_session')->where(['<', 'start_time', date('H:i:s')])->andWhere(['is_active' => '1'])->orderBy('start_time DESC')->one();
+        $opdSessionUpdated = false;
+        
+        $activeOpdSession = OpdSession::find()->asArray()->select('id, name')->where(['current_session' => '1', 'is_active' => '1'])->one();
 
-        $opdSessionPrompt = $closestSession && $closestSession['current_session'] != '1';
+        $setting = Setting::find()->asArray()->select('value')->where(['name' => 'opd_session_auto_set'])->one();
 
-        $activeOpdSession = OpdSession::find()->asArray()->select('name')->where(['current_session' => '1', 'is_active' => '1'])->one();
+        if ($setting['value'] == 'Yes') {
+            $closestSession = OpdSession::find()->where(['<', 'start_time', date('H:i:s')])->andWhere(['is_active' => '1'])->orderBy('start_time DESC')->one();
+
+            if ($closestSession && $closestSession->current_session != '1') {
+                OpdSession::updateAll(['current_session' => '0']);
+
+                $closestSession->current_session = '1';
+                $closestSession->save(false);
+
+                $opdSessionUpdated = true;
+
+                $activeOpdSession = $closestSession->toArray();
+            }
+        } else {
+            // set OPD Session to last used session
+            $latestSession = Opd::find()->asArray()->select('opd_session_id')->where(['NOT', ['opd_session_id' => 3]])->orderBy('id DESC')->limit(1)->one();
+
+            if ($latestSession && $latestSession['opd_session_id'] != $activeOpdSession['id']) {
+                OpdSession::updateAll(['current_session' => '0']);
+
+                OpdSession::updateAll(['current_session' => '1'], ['id' => $latestSession['opd_session_id']]);
+
+                $opdSessionUpdated = true;
+
+                $activeOpdSession = OpdSession::find()->asArray()->select('id, name')->where(['current_session' => '1', 'is_active' => '1'])->one();
+            }
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'opdSessionPrompt' => $opdSessionPrompt,
-            'closestSession' => $closestSession,
+            'opdSessionUpdated' => $opdSessionUpdated,
             'activeOpdSession' => $activeOpdSession,
         ]);
     }
@@ -50,7 +77,7 @@ class OpdController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -65,17 +92,33 @@ class OpdController extends Controller
         $model = new Opd();
 
         if ($model->load($this->request->post())) {
-            $model->opd_date = date('Y-m-d', strtotime($model->opd_date));
+            $model->opd_date = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $model->opd_date)));
 
             $model->created_by_user_id = Yii::$app->user->id;
 
-            $maxOpdRegNo = Opd::find()->max('opd_registration_no');
-            $model->opd_registration_no = $maxOpdRegNo + 1;
+            $transaction = Yii::$app->db->beginTransaction();
 
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Successfully saved!');
-            } else {
-                Yii::$app->session->setFlash('success', 'Failed to save! ' . json_encode($model->errors));
+            try {
+                $maxOpdRegNo = Opd::find()->max('opd_registration_no');
+                $model->opd_registration_no = $maxOpdRegNo + 1;
+    
+                // 3 is AMC Free
+                $maxSlNo = Opd::find()->where(['DATE(opd_date)' => date('Y-m-d', strtotime($model->opd_date)), 'opd_session_id' => [$model->opd_session_id, 3]])->max('serial_no');
+                $model->serial_no = $maxSlNo + 1;
+    
+                if ($model->save()) {
+                    $transaction->commit();
+
+                    Yii::$app->session->setFlash('success', 'Successfully saved!');
+                    Yii::$app->session->setFlash('print-ticket', $model->id);
+                } else {
+                    $transaction->rollBack();
+
+                    Yii::$app->session->setFlash('success', 'Failed to save! ' . json_encode($model->errors));
+                }
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('danger', 'An exception has occurred!');
             }
 
             return $this->redirect(Yii::$app->request->referrer);
@@ -87,11 +130,18 @@ class OpdController extends Controller
             $model->fee_amount = $activeOpdSession['fee'];
         }
 
-        $model->opd_date = date('d/m/Y');
+        $model->opd_date = date('d/m/Y h:i a');
 
         return $this->renderAjax('_form', [
             'model' => $model,
         ]);
+    }
+
+    // get patient details from ABHA ID
+    public function actionGetPatient($abha_id) {
+        $patient = Opd::find()->asArray()->select('patient_name, care_taker_name, age, gender, religion_id, address')->where(['abha_id' => $abha_id, 'is_active' => '1'])->orderBy('id DESC')->limit(1)->one();
+
+        return json_encode($patient);
     }
 
     /**
@@ -106,7 +156,7 @@ class OpdController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load($this->request->post())) {
-            $model->opd_date = date('Y-m-d', strtotime($model->opd_date));
+            $model->opd_date = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $model->opd_date)));
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Successfully saved!');
@@ -117,7 +167,7 @@ class OpdController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        $model->opd_date = date('d/m/Y', strtotime($model->opd_date));
+        $model->opd_date = date('d/m/Y h:i a', strtotime($model->opd_date));
 
         return $this->renderAjax('_form', [
             'model' => $model,

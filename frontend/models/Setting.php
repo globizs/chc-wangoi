@@ -26,11 +26,8 @@ class Setting extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'value'], 'required'],
-            [['name'], 'string', 'max' => 255],
+            [['value'], 'required'],
             [['value'], 'string', 'max' => 10000],
-            [['name'], 'unique'],
-            [['start_time'], 'string', 'max' => 5],
         ];
     }
 
@@ -40,8 +37,8 @@ class Setting extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => 'Name',
             'value' => 'Value',
+            'friendly_name' => 'Name',
         ];
     }
 }

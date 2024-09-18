@@ -9,7 +9,10 @@ $departmentName = $departmentName ? $departmentName['name'] : null;
 $baseUrl = Url::base(true);
 ?>
 
+<!-- Page -->
 <div class="flex flex-col gap-3 h-full">
+
+  <!-- Organization start -->
   <div class="flex flex-col">
     <div class="flex">
       <div>
@@ -21,21 +24,23 @@ $baseUrl = Url::base(true);
       <div class="text-end flex flex-col gap-3">
         <div class="flex justify-between">
           <div>&nbsp;</div>
-          <div class="bordered rounded-1 fee-pad text-xl">&#8377;<?= $model->fee_amount ?>/-</div>
+          <div class="bordered rounded-1 fee-pad text-xl">&#8377; <?= $model->fee_amount ?> /-</div>
         </div>
       </div>
     </div>
     <div class="flex">
-      <div style="flex-basis: 33%;"></div>
-      <div style="flex-basis: 33%;" class="text-center"><b><u><?= $model->opdSession->name ?></u></b></div>
-      <div style="flex-basis: 33%;" class="text-end">Date: <?= date('d/m/Y', strtotime($model->opd_date)) ?> Time:</div>
+      <div style="flex-basis: 33%;" class="flex items-center"><b>Sl. No.: <?= $model->serial_no ?></b></div>
+      <div style="flex-basis: 33%;" class="text-center bordered rounded-1 p-1"><b class=" text-xl"><?= $model->opdSession->name ?></b></div>
+      <div style="flex-basis: 33%;" class="text-end flex items-center justify-end"><b>Date:&nbsp;</b><?= date('d/m/Y', strtotime($model->opd_date)) ?>&nbsp;<b>Time:&nbsp;</b><?= date('h:i a', strtotime($model->opd_date)) ?></div>
     </div>
   </div>
+  <!-- Organization end -->
 
-  <div class="flex flex-col gap-1 border-top pt-1">
+  <!-- Patient details start -->
+  <div class="flex flex-col gap-1 border-top pt-3">
     <div class="flex justify-between">
       <div><b>O.P.D. Regn. No.: </b><?= $model->opd_registration_no ?></div>
-      <div><b><?= $model->getAttributelabel('abha_id') ?>: </b><?= $model->abha_id ?></div>
+      <div><b><?= $model->getAttributelabel('abha_id') ?>: </b><?= substr($model->abha_id, 0, 2) . '-' . substr($model->abha_id, 2, 4) . '-' . substr($model->abha_id, 6, 4) . '-' . substr($model->abha_id, 10, 4); ?></div>
     </div>
     <div><b><?= $model->getAttributelabel('patient_name') ?>: </b><?= $model->patient_name ?></div>
     <div><b><?= $model->getAttributelabel('care_taker_name') ?>: </b><?= $model->care_taker_name ?></div>
@@ -49,60 +54,101 @@ $baseUrl = Url::base(true);
       <div><b><?= $model->getattributelabel('department_id')?>: </b><?= $departmentName ?></div>
     </div>
   </div>
+  <!-- Patient details end -->
 
+  <!-- Treatment block start -->
   <div class="flex flex-1 bordered">
-    <div class="flex flex-col" style="flex-basis: 74%;">
-      <div class="border-bottom border-right p-1"><b><?= $model->getAttributelabel('diagnosis')?>: </b><?= $model->diagnosis ?></div>
-      <div class="flex flex-1 border-right">
-        <div class="flex flex-col border-right" style="flex-basis: 35.14%;">
-          <div class="flex flex-col gap-3 flex-1">
+    <!-- Treatment box layout start -->
+    <div class="flex flex-col flex-1">
+      <!-- Diagnosis -->
+      <div class="border-bottom p-1"><b><?= $model->getAttributelabel('diagnosis')?>: </b><?= $model->diagnosis ?></div>
+
+      <!-- Bottom row start -->
+      <div class="flex flex-1">
+        <!-- Left column start -->
+        <div class="flex flex-col border-right" style="flex-basis: 25%;">
+          <div class="flex flex-col flex-1 gap-1">
             <div class="flex flex-col gap-1 px-1 pt-1"><?= $vitalSigns ?></div>
 
             <div class="flex flex-col gap-1">
               <div class="border-y p-1"><b>General Physical Examination</b></div>
-              <div class="flex flex-col gap-1 p-1"><?= $physicalExamination ?></div>
+              <div class="flex flex-col gap-1 px-1"><?= $physicalExamination ?></div>
             </div>
 
             <div class="flex flex-col gap-1">
               <div class="border-y p-1"><b>Systemic Examination</b></div>
-              <div class="flex flex-col gap-1 p-1"><?= $systemicExamination ?></div>
+              <div class="flex flex-col gap-1 px-1 pb-1"><?= $systemicExamination ?></div>
             </div>
           </div>
-          <div>
-            <div class="border-y p-1">Pregnant: Yes / No</div>
-            <div class="p-1">Breastfeeding: Yes / No</div>
+          <div class="flex justify-between items-center border-top p-1">
+            <div>Pregnant: </div>
+            <div class="flex gap-1">
+              <div class="flex items-center">
+                <input type="checkbox"><span>Yes</span>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox"><span>No</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between items-center border-top p-1">
+            <div>Breastfeeding: </div>
+            <div class="flex gap-1">
+              <div class="flex items-center">
+                <input type="checkbox"><span>Yes</span>
+              </div>
+              <div class="flex items-center">
+                <input type="checkbox"><span>No</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex flex-col flex-1 gap-3">
+        <!-- Left column end -->
+
+        <!-- Middle column start -->
+        <div class="flex flex-col gap-1 border-right basis-50">
           <div class="flex flex-col flex-1 p-1">
             <div class="flex-1"><?= $chiefComplaints ?></div>
 
-            <div>
-              <div class="text-end">Full Signature of Doctor&emsp;</div>
-              <div style="font-size: 8px;">&nbsp;</div>
-              <div class="text-end">Regd. No.: &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</div>
+            <div class="flex justify-end">
+              <div class="flex flex-col gap-1" style="flex-basis: 40%;">
+                <div>Full Signature of Doctor</div>
+                <div>Regd. No.:</div>
+              </div>
             </div>
           </div>
-          <div class="text-center">
-            <?= $receiptFooter ?>
-          </div>
         </div>
+        <!-- Middle column end -->
+
+        <!-- Right column start -->
+        <div class="flex flex-col gap-1" style="flex-basis: 25%;">
+          <div class="border-bottom p-1"><b>Comorbidities</b></div>
+          <div class="flex flex-col gap-1 px-1">
+            <?= $comorbidities ?>
+          </div>
+          <div class="border-y p-1"><b>Food/Drug Allergy</b>:<br><br><br><br></div>
+          <div class="border-bottom px-1"><b>Investigation</b>:<br><br><br><br></div>
+          <div class="border-bottom px-1 pb-1"><b>Advice/Nutrition</b></div>
+          <div class="px-1">Do's:<br><br><br><br></div>
+          <div class="px-1">Don'ts:<br><br><br><br></div>
+          <div class="p-1 border-y"><b>Follow up</b>:</div>
+        </div>
+        <!-- Right column end -->
       </div>
-    </div>
-    <div class="flex flex-col gap-1 flex-1">
-      <div class="border-bottom p-1"><b>Comorbidities</b></div>
-      <div class="flex flex-col gap-1 px-1">
-        <?= $comorbidities ?>
+      <!-- Bottom row end -->
+
+      <!-- Footer start -->
+      <div class="text-center border-top p-1">
+        <?= $receiptFooter ?>
       </div>
-      <div class="border-y p-1"><b>Food/Drug Allergy</b>:<br><br><br></div>
-      <div class="border-bottom p-1"><b>Investigation</b>:<br><br><br></div>
-      <div class="border-bottom p-1"><b>Advice/Nutrition</b><br><br><br></div>
-      <div>Do's:<br><br><br></div>
-      <div>Don'ts:<br><br><br></div>
-      <div><b>Follow up</b>:<br><br><br></div>
+      <!-- Footer end -->
     </div>
+    <!-- Treatment box layout end -->
   </div>
+  <!-- Treatment block -->
 </div>
+
+<!-- <img class="watermark" src="<?= $baseUrl ?>/images/nhm-logo.png"> -->
 
 <style>
 html, body {
@@ -111,6 +157,19 @@ html, body {
 body {
   padding: 1rem 0;
   font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.nhm-logo {
+  height: 50px;
+}
+.watermark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  opacity: 0.02;
+  height: 30rem;
+  transform: translate(-50%, -50%);
+
 }
 .bordered {
   border: 1px solid #181C14;
@@ -146,8 +205,14 @@ body {
 .justify-between {
   justify-content: space-between;
 }
-.nhm-logo {
-  height: 50px;
+.justify-end {
+  justify-content: end;
+}
+.items-center {
+  align-items: center;
+}
+.basis-50 {
+  flex-basis: 50%;
 }
 .text-xl {
   font-size: 16px;
@@ -167,6 +232,9 @@ body {
 .px-1 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+.pt-3 {
+  padding-top: 1rem;
 }
 .mt-3 {
   margin-top: 1rem;
@@ -188,3 +256,9 @@ body {
   height: 100%;
 }
 </style>
+
+<script>
+setTimeout(function() {
+  window.print();
+}, 500);
+</script>

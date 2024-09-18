@@ -2,35 +2,17 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use frontend\models\Setting;
 use frontend\models\SettingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * SettingController implements the CRUD actions for Setting model.
  */
 class SettingController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
-
     /**
      * Lists all Setting models.
      *
@@ -48,72 +30,29 @@ class SettingController extends Controller
     }
 
     /**
-     * Displays a single Setting model.
-     * @param string $name Name
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($name)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($name),
-        ]);
-    }
-
-    /**
-     * Creates a new Setting model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new Setting();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'name' => $model->name]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Updates an existing Setting model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $name Name
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($name)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($name);
+        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'name' => $model->name]);
+        if ($model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Successfully saved!');
+            } else {
+                Yii::$app->session->setFlash('success', 'Failed to save! ' . json_encode($model->errors));
+            }
+
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->render('_form', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Deletes an existing Setting model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $name Name
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($name)
-    {
-        $this->findModel($name)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

@@ -46,11 +46,20 @@ class OpdSearch extends Opd
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
 
         $this->is_active = '1';
 
         $this->load($params);
+
+        $startDate = $endDate = null;
+
+        if ($this->opd_date) {
+            $dateRange = explode(' - ', $this->opd_date);
+            $startDate = date('Y-m-d', strtotime($dateRange[0]));
+            $endDate = date('Y-m-d', strtotime($dateRange[1]));
+        }
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -65,7 +74,6 @@ class OpdSearch extends Opd
             'age' => $this->age,
             'religion_id' => $this->religion_id,
             'fee_amount' => $this->fee_amount,
-            'opd_date' => $this->opd_date,
             'opd_session_id' => $this->opd_session_id,
             'department_id' => $this->department_id,
             'created_by_user_id' => $this->created_by_user_id,
@@ -76,7 +84,8 @@ class OpdSearch extends Opd
         $query->andFilterWhere(['like', 'patient_name', $this->patient_name])
             ->andFilterWhere(['like', 'care_taker_name', $this->care_taker_name])
             ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'diagnosis', $this->diagnosis]);
+            ->andFilterWhere(['like', 'diagnosis', $this->diagnosis])
+            ->andFilterWhere(['BETWEEN', 'DATE(opd_date)', $startDate, $endDate]);
 
         return $dataProvider;
     }

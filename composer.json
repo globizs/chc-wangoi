@@ -57,6 +57,8 @@
         "2amigos/qrcode-library": "~1.1",
         "kartik-v/yii2-export": "@dev",
         "kartik-v/yii2-date-range": "dev-master",
-        "kartik-v/yii2-bootstrap5-dropdown": "@dev"
+        "kartik-v/yii2-bootstrap5-dropdown": "@dev",
+        "kartik-v/yii2-editors": "dev-master",
+        "kartik-v/yii2-widget-datetimepicker": "dev-master"
     }
 }

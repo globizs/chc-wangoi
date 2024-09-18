@@ -39,7 +39,7 @@ class SettingSearch extends Setting
      */
     public function search($params)
     {
-        $query = Setting::find();
+        $query = Setting::find()->where(['input_type' => 'richtext']);
 
         // add conditions that should always apply here
 

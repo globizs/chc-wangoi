@@ -1,44 +1,38 @@
 <?php
 
-use frontend\models\Setting;
-use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
-/** @var yii\web\View $this */
-/** @var frontend\models\SettingSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
-
-$this->title = 'Settings';
+$this->title = 'OPD Ticket Settings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="setting-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'tableOptions' => ['class' => 'table table-sm table-striped'],
+                    'pager' => ['linkOptions' => ['class' => 'page-link'], 'disabledPageCssClass' => 'page-item', 'pageCssClass' => 'page-item', 'prevPageCssClass' => 'page-item prev', 'nextPageCssClass' => 'page-item next', 'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link disabled']],
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
 
-    <p>
-        <?= Html::a('Create Setting', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'name',
-            'value',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Setting $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'name' => $model->name]);
-                 }
-            ],
-        ],
-    ]); ?>
-
+                        'friendly_name',
+                        /* [
+                            'attribute' => 'value',
+                            'value' => function($model) {
+                                return $model->input_type != 'richtext' ? $model->value : null;
+                            },
+                        ], */
+                        [
+                            'class' => ActionColumn::class,
+                            'template' => '{update}',
+                        ],
+                    ],
+                ]); ?>
+            </div>
+        </div>
+    </div>
 
 </div>

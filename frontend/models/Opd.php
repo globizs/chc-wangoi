@@ -48,10 +48,10 @@ class Opd extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['opd_registration_no', 'patient_name', 'care_taker_name', 'age', 'address', 'diagnosis', 'fee_amount', 'opd_date', 'opd_session_id', 'department_id'], 'required'],
+            [['opd_registration_no', 'serial_no', 'patient_name', 'care_taker_name', 'age', 'address', 'diagnosis', 'fee_amount', 'opd_date', 'opd_session_id', 'department_id', 'gender'], 'required'],
             [['opd_registration_no', 'age', 'religion_id', 'fee_amount', 'opd_session_id', 'department_id'], 'integer'],
             [['gender', 'address', 'diagnosis'], 'string'],
-            [['opd_date'], 'string', 'min' => 10, 'max' => 11],
+            [['opd_date'], 'string', 'min' => 10, 'max' => 20],
             [['abha_id'], 'match', 'pattern' => '/^\d{14}$/', 'message' => 'ABHA ID must be a 14-digit number'],
             [['patient_name', 'care_taker_name'], 'string', 'max' => 255],
             [['is_active'], 'string', 'max' => 1],
@@ -69,6 +69,7 @@ class Opd extends \yii\db\ActiveRecord
     {
         return [
             'opd_registration_no' => 'O.P.D. Regn. No.',
+            'serial_no' => 'Sl. No.',
             'abha_id' => 'ABHA ID',
             'patient_name' => 'Name of Patient',
             'care_taker_name' => 'Name of Husband/Guardian',

@@ -21,9 +21,9 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
 ?>
 <div class="opd-index">
 
-    <?php if ($opdSessionPrompt) { ?>
-        <div class="bg-warning mb-3 p-2">
-            <?= Html::a('Click here to set current OPD session to: <b>'.$closestSession['name'].'</b>? Start time: ' . date('h:i a', strtotime($closestSession['start_time'])), ['/opd-session/set-current', 'id' => $closestSession['id']], ['class' => 'btn btn-link text-white', 'data-confirm' => 'Set current session to ' . $closestSession['name'] . '?', 'data-method' => 'POST']) ?>
+    <?php if ($opdSessionUpdated) { ?>
+        <div class="bg-dark text-white mb-3 p-2">
+            OPD Session changed to <?= $activeOpdSession['name'] ?>
         </div>
     <?php } ?>
 
@@ -63,12 +63,18 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                 ],
                 'columns' => [
                     'opd_registration_no',
+                    'serial_no',
                     'abha_id',
                     'patient_name',
                     'age',
                     'gender',
                     'fee_amount',
-                    'opd_date',
+                    [
+                        'attribute' => 'opd_date',
+                        'value' => function($model) {
+                            return date('d/m/Y h:i a', strtotime($model->opd_date));
+                        }
+                    ],
                     [
                         'attribute' => 'department_id',
                         'value' => function($model) use($departments) {
@@ -90,6 +96,17 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
         <?= $this->render('_search', ['model' => $searchModel, 'departments' => $departments, 'religions' => $religions, 'users' => $users, 'opdSessions' => $opdSessions, 'statuses' => $statuses]); ?>
     </div>
 
+    <?php
+    // to print OPD ticket if set in session
+    $printTicketId = Yii::$app->session->get('print-ticket');
+    if ($printTicketId) {
+        echo '<div class="text-end">';
+        echo Html::a('Click here to print OPD ticket', ['/opd/print', 'id' => $printTicketId], ['target' => '_blank', 'id' => 'print-ticket-link']);
+        echo '</div>';
+        echo '<script>document.getElementById("print-ticket-link").click();</script>';
+    }
+    ?>
+
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -101,12 +118,14 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                         ['class' => 'yii\grid\SerialColumn'],
 
                         'opd_registration_no',
-                        'abha_id',
+                        'serial_no',
                         'patient_name',
-                        'age',
-                        'gender',
-                        'fee_amount',
-                        'opd_date',
+                        [
+                            'attribute' => 'opd_date',
+                            'value' => function($model) {
+                                return date('d/m/Y h:i a', strtotime($model->opd_date));
+                            }
+                        ],
                         [
                             'attribute' => 'department_id',
                             'value' => function($model) use($departments) {
@@ -114,17 +133,20 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                             },
                             'filter' => $departments
                         ],
-                        [
+                        /* [
                             'attribute' => 'created_by_user_id',
                             'value' => function($model) use($users) {
                                 return isset($users[$model->created_by_user_id]) ? $users[$model->created_by_user_id] : $model->created_by_user_id;
                             },
                             'filter' => $users
-                        ],
+                        ], */
                         [
                             'class' => ActionColumn::class,
-                            'template' => '{view} {print} {update}',
+                            'template' => '{print} {view} {update}',
                             'buttons' => [
+                                'view' => function($url, $model) {
+                                    return Html::a('<i class="fas fa-eye"></i>', $url, ['class' => 'openModal', 'size' => 'xl', 'header' => 'OPD Registration: ' . $model->opd_registration_no]);
+                                },
                                 'print' => function($url, $model) {
                                     return Html::a('<i class="fas fa-print"></i>', $url, ['target' => '_blank']);
                                 },

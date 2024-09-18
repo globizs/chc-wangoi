@@ -23,11 +23,11 @@ echo Menu::widget([
   ',
   'brand' => [
     'url' => ['/'],
-    'content' => '<div>CHC Wangoi</div>'
+    'content' => '<img src="/images/nhm-logo.png" style="height: 50px;"><div>R.K.S. CHC Wangoi</div>'
   ],
   'items' => [
-    ['label' => 'Dashboard', 'url' => ['/site/index'], 'icon' => 'fas fa-id-card'],
-    ['label' => 'OPD', 'url' => ['/opd/index'], 'icon' => 'fas fa-id-card'],
+    ['label' => 'OPD Registration', 'url' => ['/opd/index'], 'icon' => 'fas fa-ticket-alt'],
+    ['label' => 'Users', 'url' => ['/user/index'], 'icon' => 'fas fa-users'],
     [
       'label' => 'Settings',
       'icon' => 'fa fa-cog',
@@ -35,8 +35,8 @@ echo Menu::widget([
         [ 'label' => 'Departments', 'url' => ['/department']],
         [ 'label' => 'OPD Sessions', 'url' => ['/opd-session']],
         [ 'label' => 'Religions', 'url' => ['/religion']],
+        [ 'label' => 'OPD Ticket Settings', 'url' => ['/setting']],
       ],
     ],
-    ['label' => 'Users', 'url' => ['/user/index'], 'icon' => 'fas fa-users'],
   ],
 ]);

@@ -3,18 +3,25 @@
 use frontend\models\Department;
 use frontend\models\OpdSession;
 use frontend\models\Religion;
+use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\ArrayHelper;
-use kartik\date\DatePicker;
+use yii\helpers\Url;
 
 $options = Yii::$app->params['bs5_floating_label_options'];
 $template = Yii::$app->params['bs5_floating_label_template'];
 
-$opdSessions = ArrayHelper::map(OpdSession::find()->asArray()->select('id, name')->where(['is_active' => '1'])->all(), 'id', 'name');
-$religions = ArrayHelper::map(Religion::find()->asArray()->select('name')->where(['is_active' => '1'])->orderBy('name')->all(), 'name', 'name');
+$opdSessionsRaw = OpdSession::find()->asArray()->select('id, name, fee')->where(['is_active' => '1'])->all();
+
+$opdSessions = ArrayHelper::map($opdSessionsRaw, 'id', 'name');
+$opdSessionFees = ArrayHelper::map($opdSessionsRaw, 'id', 'fee');
+
+$religions = ArrayHelper::map(Religion::find()->asArray()->select('id, name')->where(['is_active' => '1'])->orderBy('name')->all(), 'id', 'name');
 $departments = ArrayHelper::map(Department::find()->asArray()->select('id, name')->where(['is_active' => '1'])->orderBy('name')->all(), 'id', 'name');
 $statues = ['1' => 'Active', '0' => 'Deleted'];
+
+$getPatientDetailsUrl = Url::to(['/opd/get-patient', 'abha_id' => '']);
 
 ?>
 
@@ -24,13 +31,14 @@ $statues = ['1' => 'Active', '0' => 'Deleted'];
 
     <div class="row">
         <div class="col-md-3">
-            <?= $form->field($model, 'opd_date')->widget(DatePicker::class, [
+            <?= $form->field($model, 'opd_date')->widget(DateTimePicker::class, [
                 'options' => ['placeholder' => 'OPD date', 'autocomplete' => 'off'],
                 'removeButton' => false,
                 'pluginOptions' => [
-                    'format' => 'mm/dd/yyyy',
+                    'format' => 'dd/mm/yyyy HH:ii P',
                     'autoclose' => true,
                     'todayHighlight' => true,
+                    'showMeridian' => true,
                 ]
             ])->label(false); ?>
         </div>
@@ -84,3 +92,33 @@ $statues = ['1' => 'Active', '0' => 'Deleted'];
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$opdSessionFees = json_encode($opdSessionFees);
+
+$this->registerJs(<<<JS
+var sessionFees = $opdSessionFees;
+$("#opd-opd_session_id").change(function() {
+    const opdFee = sessionFees[this.value];
+    $("#opd-fee_amount").val(opdFee);
+});
+
+$("#opd-abha_id").blur(function() {
+    const abhaId = $(this).val();
+
+    if (abhaId.length === 14) {
+        $.get("$getPatientDetailsUrl" + abhaId, function(data) {
+            data = JSON.parse(data);
+            if (data) {
+                $("#opd-patient_name").val(data.patient_name);
+                $("#opd-care_taker_name").val(data.care_taker_name);
+                $("#opd-age").val(data.age);
+                $("#opd-gender").val(data.gender);
+                $("#opd-religion_id").val(data.religion_id);
+                $("#opd-address").val(data.address);
+            }
+        })
+    }
+});
+JS
+);

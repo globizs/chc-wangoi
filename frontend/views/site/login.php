@@ -11,7 +11,9 @@ $template = Yii::$app->params['bs5_floating_label_template'];
 ?>
 <div class="site-login">
     <br>
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2>OPD Registration</h2>
+    <br>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <p>Please fill out the following fields to login:</p>
 

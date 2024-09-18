@@ -11,7 +11,7 @@ use yii\helpers\Html;
     <ul class="navbar-nav" style="margin-left: auto !important;">
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user-circle fa-2x"></i>
+                <?= substr(Yii::$app->user->identity->username, 0, 1) ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a herf="#!" class="dropdown-item"><?= Yii::$app->user->identity->username ?></a>
