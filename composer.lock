@@ -4,129 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f90e9cb78ff0b0a077034ca64f57a44b",
+    "content-hash": "9d03c0a9c8fd20e166506d810026b243",
     "packages": [
-        {
-            "name": "2amigos/qrcode-library",
-            "version": "1.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/2amigos/qrcode-library.git",
-                "reference": "5356f2355c7ba9a9ced67753411c88c2c095deb0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/2amigos/qrcode-library/zipball/5356f2355c7ba9a9ced67753411c88c2c095deb0",
-                "reference": "5356f2355c7ba9a9ced67753411c88c2c095deb0",
-                "shasum": ""
-            },
-            "require": {
-                "bacon/bacon-qr-code": "^1.0",
-                "ext-gd": "*",
-                "khanamiryan/qrcode-detector-decoder": "^1.0",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "codeception/codeception": "*",
-                "codeception/specify": "^0.4.3",
-                "codeception/verify": "^0.3.1",
-                "friendsofphp/php-cs-fixer": "^2.3",
-                "phpmd/phpmd": "@stable",
-                "scrutinizer/ocular": "~1.1",
-                "squizlabs/php_codesniffer": "*",
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Da\\QrCode\\": "./src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "2amigOS! Consulting Group",
-                    "email": "hola@2amigos.us",
-                    "homepage": "http://2amigos.us",
-                    "role": "Developer"
-                }
-            ],
-            "description": "QrCode Generator",
-            "homepage": "http://www.2amigos.us/open-source/details/qrcode-library",
-            "keywords": [
-                "2amigos",
-                "component",
-                "extension",
-                "qr",
-                "qrcode",
-                "yii",
-                "yii 2",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/2amigos/qrcode-library/issues",
-                "source": "https://github.com/2amigos/qrcode-library"
-            },
-            "time": "2017-08-25T15:23:58+00:00"
-        },
-        {
-            "name": "bacon/bacon-qr-code",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "5a91b62b9d37cee635bbf8d553f4546057250bee"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/5a91b62b9d37cee635bbf8d553f4546057250bee",
-                "reference": "5a91b62b9d37cee635bbf8d553f4546057250bee",
-                "shasum": ""
-            },
-            "require": {
-                "ext-iconv": "*",
-                "php": "^5.4|^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8"
-            },
-            "suggest": {
-                "ext-gd": "to generate QR code images"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "BaconQrCode": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ben Scholzen 'DASPRiD'",
-                    "email": "mail@dasprids.de",
-                    "homepage": "http://www.dasprids.de",
-                    "role": "Developer"
-                }
-            ],
-            "description": "BaconQrCode is a QR code generator for PHP.",
-            "homepage": "https://github.com/Bacon/BaconQrCode",
-            "support": {
-                "issues": "https://github.com/Bacon/BaconQrCode/issues",
-                "source": "https://github.com/Bacon/BaconQrCode/tree/master"
-            },
-            "time": "2017-10-17T09:59:25+00:00"
-        },
         {
             "name": "bower-asset/bootstrap",
             "version": "v5.2.3",
@@ -1077,7 +956,7 @@
         },
         {
             "name": "kartik-v/yii2-widget-select2",
-            "version": "dev-master",
+            "version": "v2.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
@@ -1093,7 +972,6 @@
                 "kartik-v/yii2-krajee-base": ">=3.0.4",
                 "select2/select2": ">=4.0.0"
             },
-            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
@@ -1139,63 +1017,6 @@
                 }
             ],
             "time": "2023-06-22T07:43:31+00:00"
-        },
-        {
-            "name": "khanamiryan/qrcode-detector-decoder",
-            "version": "1.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/khanamiryan/php-qrcode-detector-decoder.git",
-                "reference": "45326fb83a2a375065dbb3a134b5b8a5872da569"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/45326fb83a2a375065dbb3a134b5b8a5872da569",
-                "reference": "45326fb83a2a375065dbb3a134b5b8a5872da569",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7 | ^7.5 | ^8.0 | ^9.0",
-                "rector/rector": "^0.13.6",
-                "symplify/easy-coding-standard": "^11.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "lib/Common/customFunctions.php"
-                ],
-                "psr-4": {
-                    "Zxing\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT",
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Ashot Khanamiryan",
-                    "email": "a.khanamiryan@gmail.com",
-                    "homepage": "https://github.com/khanamiryan",
-                    "role": "Developer"
-                }
-            ],
-            "description": "QR code decoder / reader",
-            "homepage": "https://github.com/khanamiryan/php-qrcode-detector-decoder/",
-            "keywords": [
-                "barcode",
-                "qr",
-                "zxing"
-            ],
-            "support": {
-                "issues": "https://github.com/khanamiryan/php-qrcode-detector-decoder/issues",
-                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/1.0.6"
-            },
-            "time": "2022-06-29T09:25:13+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -6825,7 +6646,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kartik-v/yii2-widget-select2": 20,
         "kartik-v/yii2-export": 20,
         "kartik-v/yii2-date-range": 20,
         "kartik-v/yii2-bootstrap5-dropdown": 20,
