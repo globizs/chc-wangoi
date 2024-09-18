@@ -12,7 +12,7 @@ $this->title = 'User Management';
 <div class="card">
 	<div class="card-body">
 		<div class="table-responsive">
-			<table class="table table-sm table-striped">
+			<table class="table table-striped">
 				<tr>
 					<th>Sl</th><th>Username</th><th>Status</th><th></th>
 				</tr>

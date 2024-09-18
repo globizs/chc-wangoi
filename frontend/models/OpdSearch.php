@@ -51,6 +51,8 @@ class OpdSearch extends Opd
 
         $this->is_active = '1';
 
+        $this->opd_date = date('d-m-Y') . ' - ' . date('d-m-Y');
+
         $this->load($params);
 
         $startDate = $endDate = null;

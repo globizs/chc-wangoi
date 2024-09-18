@@ -33,7 +33,7 @@ $updateAutoUrl = Url::to(['/opd-session/session-auto', 'mode' => '']);
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'tableOptions' => ['class' => 'table table-sm table-striped'],
+                    'tableOptions' => ['class' => 'table table-striped'],
                     'pager' => ['linkOptions' => ['class' => 'page-link'], 'disabledPageCssClass' => 'page-item', 'pageCssClass' => 'page-item', 'prevPageCssClass' => 'page-item prev', 'nextPageCssClass' => 'page-item next', 'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link disabled']],
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
