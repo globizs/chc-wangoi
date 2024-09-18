@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 
 $this->title = 'User Management';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <p>
