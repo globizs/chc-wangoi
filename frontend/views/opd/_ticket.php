@@ -19,6 +19,9 @@ $baseUrl = Url::base(true);
         <img class="nhm-logo" src="<?= $baseUrl ?>/images/nhm-logo.png">
       </div>
       <div class="flex-1 text-center">
+        <div class="text-center">
+          <img class="mayek" src="/images/mayek.jpg">
+        </div>
         <b class="text-2xl"><?= $receiptHeading ?></b>
       </div>
       <div class="text-end flex flex-col gap-3">
@@ -39,15 +42,19 @@ $baseUrl = Url::base(true);
   <!-- Patient details start -->
   <div class="flex flex-col gap-1 border-top pt-3">
     <div class="flex justify-between">
-      <div><b>O.P.D. Regn. No.: </b><?= $model->opd_registration_no ?></div>
+      <div><b>O.P.D. Regn. No.: </b><?= $model->opd_registration_no . '/' . $model->serial_no; ?></div>
+      <div><b><?= $model->getAttributelabel('aadhaar_no') ?>: </b><?= substr($model->aadhaar_no, 0, 4) . ' ' . substr($model->aadhaar_no, 4, 4) . ' ' . substr($model->aadhaar_no, 8, 4); ?></div>
       <div><b><?= $model->getAttributelabel('abha_id') ?>: </b><?= substr($model->abha_id, 0, 2) . '-' . substr($model->abha_id, 2, 4) . '-' . substr($model->abha_id, 6, 4) . '-' . substr($model->abha_id, 10, 4); ?></div>
     </div>
-    <div><b><?= $model->getAttributelabel('patient_name') ?>: </b><?= $model->patient_name ?></div>
-    <div><b><?= $model->getAttributelabel('care_taker_name') ?>: </b><?= $model->care_taker_name ?></div>
+    <div class="flex justify-between">
+      <div><b><?= $model->getAttributelabel('patient_name') ?>: </b><?= $model->patient_name ?></div>
+      <div><b><?= $model->getAttributelabel('care_taker_name') ?>: </b><?= $model->care_taker_name ?></div>
+    </div>
     <div class="flex">
-      <div style="flex-basis: 33%;"><b><?= $model->getAttributelabel('age') ?>: </b><?= $model->age ?></div>
-      <div style="flex-basis: 33%;"><b><?= $model->getAttributelabel('gender')?>: </b><?= $model->gender ?></div>
-      <div style="flex-basis: 33%;"><b><?= $model->getAttributelabel('religion')?>: </b><?= $model->religion ? $model->religion->name : null ?></div>
+      <div style="flex-basis: 35%;"><b><?= $model->getAttributelabel('contact_no') ?>: </b><?= $model->contact_no ?></div>
+      <div style="flex-basis: 35%;"><b><?= $model->getAttributelabel('age') ?>: </b><?= $model->convertDaysToAge($model->age) ?></div>
+      <div style="flex-basis: 10%;"><b><?= $model->getAttributelabel('gender')?>: </b><?= $model->gender ?></div>
+      <div style="flex-basis: 20%;" class="text-end"><b><?= $model->getAttributelabel('religion')?>: </b><?= $model->religion ? $model->religion->name : null ?></div>
     </div>
     <div class="flex justify-between">
       <div><b><?= $model->getAttributelabel('address')?>: </b><?= $model->address ?></div>
@@ -61,26 +68,26 @@ $baseUrl = Url::base(true);
     <!-- Treatment box layout start -->
     <div class="flex flex-col flex-1">
       <!-- Diagnosis -->
-      <div class="border-bottom p-1"><b><?= $model->getAttributelabel('diagnosis')?>: </b><?= $model->diagnosis ?></div>
+      <div class="border-bottom px-1-5 p-1"><b>Diagnosis/Prov. Diagnosis: </b></div>
 
       <!-- Bottom row start -->
       <div class="flex flex-1">
         <!-- Left column start -->
         <div class="flex flex-col border-right" style="flex-basis: 25%;">
           <div class="flex flex-col flex-1 gap-1">
-            <div class="flex flex-col gap-1 px-1 pt-1"><?= $vitalSigns ?></div>
+            <div class="flex flex-col gap-1 px-1-5 pt-1"><?= $vitalSigns ?></div>
 
             <div class="flex flex-col gap-1">
-              <div class="border-y p-1"><b>General Physical Examination</b></div>
-              <div class="flex flex-col gap-1 px-1"><?= $physicalExamination ?></div>
+              <div class="border-y p-1-5"><b>General Physical Examination</b></div>
+              <div class="flex flex-col gap-1 px-1-5"><?= $physicalExamination ?></div>
             </div>
 
             <div class="flex flex-col gap-1">
-              <div class="border-y p-1"><b>Systemic Examination</b></div>
-              <div class="flex flex-col gap-1 px-1 pb-1"><?= $systemicExamination ?></div>
+              <div class="border-y p-1-5"><b>Systemic Examination</b></div>
+              <div class="flex flex-col gap-1 px-1-5 pb-1"><?= $systemicExamination ?></div>
             </div>
           </div>
-          <div class="flex justify-between items-center border-top p-1">
+          <div class="flex justify-between items-center border-top p-1-5">
             <div>Pregnant: </div>
             <div class="flex gap-1">
               <div class="flex items-center">
@@ -91,7 +98,7 @@ $baseUrl = Url::base(true);
               </div>
             </div>
           </div>
-          <div class="flex justify-between items-center border-top p-1">
+          <div class="flex justify-between items-center border-top p-1-5">
             <div>Breastfeeding: </div>
             <div class="flex gap-1">
               <div class="flex items-center">
@@ -107,46 +114,47 @@ $baseUrl = Url::base(true);
 
         <!-- Middle column start -->
         <div class="flex flex-col gap-1 border-right basis-50">
-          <div class="flex flex-col flex-1 p-1">
+          <div class="flex flex-col flex-1 p-1-5">
             <div class="flex-1"><?= $chiefComplaints ?></div>
 
             <div class="flex justify-end">
-              <div class="flex flex-col gap-1" style="flex-basis: 40%;">
-                <div>Full Signature of Doctor</div>
-                <div>Regd. No.:</div>
+              <div class="flex flex-col gap-1" style="flex-basis: 45%;">
+                <div>Signature of Doctor</div>
+                <div style="margin-bottom: 8px;">Name & Regd. No.:</div>
               </div>
             </div>
           </div>
+          <!-- Footer start -->
+          <div class="text-center border-top p-1-5">
+            <?= $receiptFooter ?>
+          </div>
+          <!-- Footer end -->
         </div>
         <!-- Middle column end -->
 
         <!-- Right column start -->
         <div class="flex flex-col gap-1" style="flex-basis: 25%;">
-          <div class="border-bottom p-1"><b>Comorbidities</b></div>
-          <div class="flex flex-col gap-1 px-1">
+          <div class="border-bottom p-1-5"><b>Comorbidities</b></div>
+          <div class="flex flex-col gap-1 px-1-5">
             <?= $comorbidities ?>
           </div>
-          <div class="border-y p-1"><b>Food/Drug Allergy</b>:<br><br><br><br></div>
-          <div class="border-bottom px-1"><b>Investigation</b>:<br><br><br><br></div>
-          <div class="border-bottom px-1 pb-1"><b>Advice/Nutrition</b></div>
-          <div class="px-1">Do's:<br><br><br><br></div>
-          <div class="px-1">Don'ts:<br><br><br><br></div>
-          <div class="p-1 border-y"><b>Follow up</b>:</div>
+          <div class="border-top p-1-5"><b>Food/Drug Allergy</b>:<br><br><br></div>
+          <div class="border-top p-1-5"><b>Investigation</b>:<div><?= $investigation ?></div></div>
+          <div class="border-top p-1-5"><b>Advice/Nutrition:</b><br><br></div>
+          <div class="px-1-5">Do's:<br><br><br></div>
+          <div class="px-1-5">Don'ts:<br><br><br></div>
+          <div class="p-1-5 border-top"><b>Follow up</b>:</div>
         </div>
         <!-- Right column end -->
       </div>
       <!-- Bottom row end -->
-
-      <!-- Footer start -->
-      <div class="text-center border-top p-1">
-        <?= $receiptFooter ?>
-      </div>
-      <!-- Footer end -->
     </div>
     <!-- Treatment box layout end -->
   </div>
   <!-- Treatment block -->
+  <div class="text-end">Entry by: <?= $model->createByUserId->username ?></div>
 </div>
+
 
 <!-- <img class="watermark" src="<?= $baseUrl ?>/images/nhm-logo.png"> -->
 
@@ -161,6 +169,9 @@ body {
 }
 .nhm-logo {
   height: 50px;
+}
+.mayek {
+  height: 16px;
 }
 .watermark {
   position: absolute;
@@ -220,14 +231,24 @@ body {
 .text-2xl {
   font-size: 18px;
 }
+.p-1-5 {
+  padding: 0.3rem;
+}
 .p-1 {
   padding: 0.5rem;
 }
 .pt-1 {
   padding-top: 0.5rem;
 }
+.pb-1-5 {
+  padding-bottom: 0.3rem;
+}
 .pb-1 {
   padding-bottom: 0.5rem;
+}
+.px-1-5 {
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }
 .px-1 {
   padding-left: 0.5rem;

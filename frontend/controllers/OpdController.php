@@ -77,8 +77,12 @@ class OpdController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $model->age_formatted = $model->convertDaysToAge($model->age);
+
         return $this->renderAjax('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -95,16 +99,16 @@ class OpdController extends Controller
             $model->opd_date = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $model->opd_date)));
 
             $model->created_by_user_id = Yii::$app->user->id;
-
+            
+            $model->date_of_birth = date('Y-m-d', strtotime($model->date_of_birth));
+            $model->age = $model->calculateDaysBetweenDates($model->date_of_birth, date('Y-m-d', strtotime($model->opd_date)));    // no. of days
+            
             $transaction = Yii::$app->db->beginTransaction();
-
+            
             try {
-                $maxOpdRegNo = Opd::find()->max('opd_registration_no');
-                $model->opd_registration_no = $maxOpdRegNo + 1;
-    
-                // 3 is AMC Free
-                $maxSlNo = Opd::find()->where(['DATE(opd_date)' => date('Y-m-d', strtotime($model->opd_date)), 'opd_session_id' => [$model->opd_session_id, 3]])->max('serial_no');
-                $model->serial_no = $maxSlNo + 1;
+                $model->generateRegNo();
+
+                $model->generateSerial();
     
                 if ($model->save()) {
                     $transaction->commit();
@@ -114,7 +118,7 @@ class OpdController extends Controller
                 } else {
                     $transaction->rollBack();
 
-                    Yii::$app->session->setFlash('success', 'Failed to save! ' . json_encode($model->errors));
+                    Yii::$app->session->setFlash('danger', 'Failed to save! ' . json_encode($model->errors));
                 }
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -138,8 +142,19 @@ class OpdController extends Controller
     }
 
     // get patient details from ABHA ID
-    public function actionGetPatient($abha_id) {
-        $patient = Opd::find()->asArray()->select('patient_name, care_taker_name, age, gender, religion_id, address')->where(['abha_id' => $abha_id, 'is_active' => '1'])->orderBy('id DESC')->limit(1)->one();
+    public function actionGetPatientByAbha($abha_id) {
+        $patient = Opd::find()->asArray()->select('patient_name, care_taker_name, date_of_birth, contact_no, gender, religion_id, address, aadhaar_no')->where(['abha_id' => $abha_id, 'is_active' => '1'])->orderBy('id DESC')->limit(1)->one();
+
+        $patient['date_of_birth'] = date('d-M-Y', strtotime($patient['date_of_birth']));
+
+        return json_encode($patient);
+    }
+
+    // get patient details from AADHAAR No.
+    public function actionGetPatientByAadhaar($aadhaar_no) {
+        $patient = Opd::find()->asArray()->select('patient_name, care_taker_name, date_of_birth, contact_no, gender, religion_id, address, abha_id')->where(['aadhaar_no' => $aadhaar_no, 'is_active' => '1'])->orderBy('id DESC')->limit(1)->one();
+
+        $patient['date_of_birth'] = date('d-M-Y', strtotime($patient['date_of_birth']));
 
         return json_encode($patient);
     }
@@ -158,16 +173,22 @@ class OpdController extends Controller
         if ($model->load($this->request->post())) {
             $model->opd_date = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $model->opd_date)));
 
+            $model->date_of_birth = date('Y-m-d', strtotime($model->date_of_birth));
+            $model->age = $model->calculateDaysBetweenDates($model->date_of_birth, date('Y-m-d', strtotime($model->opd_date)));    // no. of days
+
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Successfully saved!');
             } else {
-                Yii::$app->session->setFlash('success', 'Failed to save! ' . json_encode($model->errors));
+                Yii::$app->session->setFlash('danger', 'Failed to save! ' . json_encode($model->errors));
             }
 
             return $this->redirect(Yii::$app->request->referrer);
         }
 
         $model->opd_date = date('d/m/Y h:i a', strtotime($model->opd_date));
+        $model->date_of_birth = date('d-M-Y', strtotime($model->date_of_birth));
+
+        $model->age_formatted = $model->convertDaysToAge($model->age);
 
         return $this->renderAjax('_form', [
             'model' => $model,
@@ -176,7 +197,7 @@ class OpdController extends Controller
 
     // print opd ticket
     public function actionPrint($id) {
-        $settings = Setting::find()->asArray()->select('name, value')->where(['name' => ['receipt_heading', 'vital_signs', 'physical_examination', 'systemic_examination', 'chief_complaints', 'comorbidities', 'receipt_footer']])->all();
+        $settings = Setting::find()->asArray()->select('name, value')->where(['name' => ['receipt_heading', 'vital_signs', 'physical_examination', 'systemic_examination', 'chief_complaints', 'comorbidities', 'receipt_footer', 'investigation']])->all();
 
         foreach ($settings as $setting) {
             switch ($setting['name']) {
@@ -198,6 +219,9 @@ class OpdController extends Controller
                 case 'comorbidities':
                     $comorbidities = $setting['value'];
                     break;
+                case 'investigation':
+                    $investigation = $setting['value'];
+                    break;
                 case 'receipt_footer':
                     $receiptFooter = $setting['value'];
                     break;
@@ -213,7 +237,19 @@ class OpdController extends Controller
             'chiefComplaints' => $chiefComplaints,
             'comorbidities' => $comorbidities,
             'receiptFooter' => $receiptFooter,
+            'investigation' => $investigation,
         ]);
+    }
+
+    // to format age from dob (ajax)
+    public function actionFormatAge($date_of_birth, $date) {
+        $date_of_birth = date('Y-m-d', strtotime(str_replace('/', '-', $date_of_birth)));
+        $date = $date ? date('Y-m-d', strtotime(str_replace('/', '-', $date))) : date('Y-m-d');
+
+        $opd = new Opd();
+        $opd->age = $opd->calculateDaysBetweenDates($date_of_birth, $date);
+
+        return json_encode(['age_formatted' => $opd->convertDaysToAge($opd->age)]);
     }
 
     /**

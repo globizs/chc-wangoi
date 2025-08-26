@@ -17,8 +17,8 @@ class OpdSearch extends Opd
     public function rules()
     {
         return [
-            [['opd_registration_no', 'age', 'religion_id', 'fee_amount', 'opd_session_id', 'department_id', 'created_by_user_id'], 'integer'],
-            [['abha_id', 'patient_name', 'care_taker_name', 'gender', 'address', 'diagnosis', 'opd_date', 'is_active'], 'safe'],
+            [['age', 'religion_id', 'fee_amount', 'opd_session_id', 'department_id', 'created_by_user_id', 'contact_no'], 'integer'],
+            [['opd_registration_no', 'abha_id', 'patient_name', 'care_taker_name', 'gender', 'address', 'diagnosis', 'opd_date', 'is_active', 'aadhaar_no'], 'safe'],
         ];
     }
 
@@ -69,18 +69,25 @@ class OpdSearch extends Opd
             return $dataProvider;
         }
 
+        $ori_opd_registration_no = $this->opd_registration_no;
+        $opd_reg_no = explode('/', $this->opd_registration_no);
+        $this->opd_registration_no = $opd_reg_no[0];
+        $this->serial_no = isset($opd_reg_no[1]) ? $opd_reg_no[1] : null;
+
         // grid filtering conditions
         $query->andFilterWhere([
             'is_active' => $this->is_active,
+            'serial_no' => $this->serial_no,
             'opd_registration_no' => $this->opd_registration_no,
-            'age' => $this->age,
             'religion_id' => $this->religion_id,
             'fee_amount' => $this->fee_amount,
             'opd_session_id' => $this->opd_session_id,
             'department_id' => $this->department_id,
             'created_by_user_id' => $this->created_by_user_id,
             'abha_id' => str_replace(' ', '', $this->abha_id),
+            'aadhaar_no' => str_replace(' ', '', $this->aadhaar_no),
             'gender' => $this->gender,
+            'contact_no' => $this->contact_no,
         ]);
 
         $query->andFilterWhere(['like', 'patient_name', $this->patient_name])
@@ -88,6 +95,8 @@ class OpdSearch extends Opd
             ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'diagnosis', $this->diagnosis])
             ->andFilterWhere(['BETWEEN', 'DATE(opd_date)', $startDate, $endDate]);
+
+        $this->opd_registration_no = $ori_opd_registration_no;
 
         return $dataProvider;
     }

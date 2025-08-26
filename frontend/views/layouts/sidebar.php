@@ -27,6 +27,7 @@ echo Menu::widget([
   ],
   'items' => [
     ['label' => 'OPD Registration', 'url' => ['/opd/index'], 'icon' => 'fas fa-ticket-alt'],
+    ['label' => 'Report', 'url' => ['/report/index'], 'icon' => 'fas fa-database'],
     ['label' => 'Users', 'url' => ['/user/index'], 'icon' => 'fas fa-users'],
     [
       'label' => 'Settings',

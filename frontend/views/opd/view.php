@@ -16,9 +16,22 @@ use yii\widgets\DetailView;
                             return substr($model->abha_id, 0, 2) . '-' . substr($model->abha_id, 2, 4) . '-' . substr($model->abha_id, 6, 4) . '-' . substr($model->abha_id, 10, 4);
                         }
                     ],
+                    [
+                        'attribute' => 'aadhaar_no',
+                        'value' => function($model) {
+                            return substr($model->aadhaar_no, 0, 4) . ' ' . substr($model->aadhaar_no, 4, 4) . ' ' . substr($model->aadhaar_no, 8, 4);
+                        }
+                    ],
                     'patient_name',
                     'care_taker_name',
-                    'age',
+                    'contact_no',
+                    [
+                        'attribute' => 'date_of_birth',
+                        'value' => function($model) {
+                            return date('d-M-Y', strtotime($model->date_of_birth));
+                        },
+                    ],
+                    'age_formatted',
                     'gender',
                     [
                         'attribute' => 'religion_id',
@@ -28,7 +41,6 @@ use yii\widgets\DetailView;
                         },
                     ],
                     'address:ntext',
-                    'diagnosis:ntext',
                 ],
             ]) ?>
         </div>
@@ -36,6 +48,13 @@ use yii\widgets\DetailView;
             <?= DetailView::widget([
                 'model' => $model,
                 'attributes' => [
+                    'serial_no',
+                    [
+                        'attribute' => 'opd_registration_no',
+                        'value' => function($model) {
+                            return $model->opd_registration_no . '/' . $model->serial_no;
+                        }
+                    ],
                     [
                         'attribute' => 'fee_amount',
                         'value' => function($model) {

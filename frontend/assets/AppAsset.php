@@ -14,9 +14,12 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/styles.css',
+        'css/datatables.min.css',
     ];
     public $js = [
         'js/main.js',
+        'js/html2canvas.min.js',
+        'js/datatables.min.js',
         // 'js/password-strength.js',
     ];
     public $depends = [

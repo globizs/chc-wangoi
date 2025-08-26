@@ -62,17 +62,36 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                     ExportMenu::FORMAT_CSV => false,
                 ],
                 'columns' => [
-                    'opd_registration_no',
                     'serial_no',
+                    [
+                        'attribute' => 'opd_registration_no',
+                        'value' => function($model) {
+                            return $model->opd_registration_no . '/' . $model->serial_no;
+                        }
+                    ],
                     'abha_id',
+                    'aadhaar_no',
                     'patient_name',
-                    'age',
+                    'care_taker_name',
+                    'contact_no',
+                    [
+                        'attribute' => 'date_of_birth',
+                        'value' => function($model) {
+                            return date('d-M-Y', strtotime($model->date_of_birth));
+                        }
+                    ],
+                    [
+                        'attribute' => 'age',
+                        'value' => function($model) {
+                            return $model->convertDaysToAge($model->age);
+                        }
+                    ],
                     'gender',
                     'fee_amount',
                     [
                         'attribute' => 'opd_date',
                         'value' => function($model) {
-                            return date('d/m/Y h:i a', strtotime($model->opd_date));
+                            return date('d-M-Y h:i a', strtotime($model->opd_date));
                         }
                     ],
                     [
@@ -116,9 +135,13 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                     'pager' => ['linkOptions' => ['class' => 'page-link'], 'disabledPageCssClass' => 'page-item', 'pageCssClass' => 'page-item', 'prevPageCssClass' => 'page-item prev', 'nextPageCssClass' => 'page-item next', 'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link disabled']],
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-
-                        'opd_registration_no',
-                        'serial_no',
+                        
+                        [
+                            'attribute' => 'opd_registration_no',
+                            'value' => function($model) {
+                                return $model->opd_registration_no . '/' . $model->serial_no;
+                            }
+                        ],
                         'patient_name',
                         [
                             'attribute' => 'opd_date',
@@ -145,13 +168,13 @@ $statuses = ['1' => 'Active', '0' => 'Deleted'];
                             'template' => '{print} {view} {update}',
                             'buttons' => [
                                 'view' => function($url, $model) {
-                                    return Html::a('<i class="fas fa-eye"></i>', $url, ['class' => 'openModal', 'size' => 'xl', 'header' => 'OPD Registration: ' . $model->opd_registration_no]);
+                                    return Html::a('<i class="fas fa-eye"></i>', $url, ['class' => 'openModal', 'size' => 'xl', 'header' => 'OPD Registration: ' . $model->opd_registration_no . '/' . $model->serial_no]);
                                 },
                                 'print' => function($url, $model) {
                                     return Html::a('<i class="fas fa-print"></i>', $url, ['target' => '_blank']);
                                 },
                                 'update' => function($url, $model) {
-                                    return Html::a('<i class="fas fa-edit"></i>', $url, ['class' => 'openModal', 'size' => 'xl', 'header' => 'Update OPD Registration: ' . $model->opd_registration_no]);
+                                    return Html::a('<i class="fas fa-edit"></i>', $url, ['class' => 'openModal', 'size' => 'xl', 'header' => 'Update OPD Registration: ' . $model->opd_registration_no . '/' . $model->serial_no]);
                                 }
                             ]
                         ],

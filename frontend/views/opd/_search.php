@@ -18,6 +18,9 @@ $genders = ['Male' => 'Male', 'Female' => 'Female', 'Transgender' => 'Transgende
         <?= $form->field($model, 'opd_registration_no')->textInput(['placeholder' => $model->getAttributeLabel('opd_registration_no'), 'class' => 'form-control form-control-sm'])->label(false) ?>
     </div>
     <div class="col-md-2">
+        <?= $form->field($model, 'aadhaar_no')->textInput(['placeholder' => $model->getAttributeLabel('aadhaar_no'), 'class' => 'form-control form-control-sm'])->label(false) ?>
+    </div>
+    <div class="col-md-2">
         <?= $form->field($model, 'abha_id')->textInput(['placeholder' => $model->getAttributeLabel('abha_id'), 'class' => 'form-control form-control-sm'])->label(false) ?>
     </div>
     <div class="col-md-2">

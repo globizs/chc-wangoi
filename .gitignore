@@ -43,3 +43,4 @@ phpunit.phar
 /backend/web/robots.txt
 /frontend/web/newadmin
 /frontend/web/uploads/*
+/myadmin
